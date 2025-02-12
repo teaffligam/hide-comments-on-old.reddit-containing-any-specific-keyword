@@ -1,0 +1,56 @@
+// ==UserScript==
+// @name         Hide Comments by Keywords REDDIT - My own script - lightweight
+// @namespace    http://tampermonkey.net/
+// @version      1.7
+// @description  Hide comments containing specific keywords (case-insensitive)
+// @author       You
+// @match        *://*/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Keywords to block (add new keywords here)
+    const keywords = [
+        "Interstellar", "Starship Troopers", "sixth sense", "The Princess Bride", "Coherence",
+        "Jaws", "Pulp fiction", "The Matrix", "Seven", "The Usual Suspects",
+        "One Flew", "Back to the Future", "Jurassic Park", "Children of men", "Forest Gump", "Shaun of the Dead", "The Dark Knight", "Bruges",
+        "Groundhog Day", "Ex Machina", "No country for old men", "Big Fish", "The Thing", "Hot Fuzz", "Prisoners", "Prestige",
+        "Eternal Sunshine of the Spotless Mind", "Little Miss Sunshine", "Whiplash", "Eyes Wide Shut", "The Lighthouse", "Memento", "Requiem", "Uncut Gems",
+        "Minority Report", "The Substance", "ladder", "Upgrade", "Lost Highway", "Se7en", "Come and See", "Barbarian",
+        "Primer", "The Game", "Predestination", "Arrival", "Oldboy", "12 Angry Men", "Under the Skin", "Mulholland", "Sorry to Bother You", "Shutter Island", "The Wailing"
+, "Beau is Afraid", "Talk To Me", "Rosemary", "Gattaca", "American History", "Princess Bride", "I Saw The Devil", "Threads", "Martyrs", "Bone Tomahawk", "Tusk", "Midsommar", "Funny Games", "Mandy"
+      , "Eraserhead", "12 Monkeys", "Inception", "timecrimes", "Mother!", "Labyrinth", "Annihilation", "Green Room", "The Others", "Donnie Darko", "Mothman", "Blair Witch", "Mitty", "Parasite", "Edge of Tomorrow", "Strange Darling"
+      , "Kill Bill", "The Sadness", "Cabin in The Woods", "Event Horizon", "The Exorcist", "Hereditary", "Chainsaw", "The Empty Man", "Smile 2", "A Serbian Film", "Oddity", "Killing of a sacred deer", "Mungo"
+      , "The Wicker Man", "Speak No Evil", "The Killing of a Sacred Deer", "Burn After Reading", "audition", "Saltburn", "Sacred Dear", "Blue Velvet", "Life is Beautiful", "Possession", "Melancholia", "Fire in the sky"
+      , "We Need to Talk About Kevin", "The Descent", "American beauty", "Vivarium", "Monkey man", "Old Boy", "Apocalypto", "The Raid", "Fight Club", "John Wick", "The Equalizer", "Mad Max"
+      , "Till Dawn", "all at Once", "Alien", "Atomic Blond", "Bullet Train", "Hardcore Henry", "Schindler", "Crank", "Zone of Interest", "Blade Runner", "Dune", "Swiss Army Man", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
+      , "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
+      , "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
+      , "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
+      , "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
+
+    ];
+
+    // Function to hide elements
+    function hideElements() {
+        // Hide elements containing specified keywords
+        const comments = document.querySelectorAll('.thing.comment');
+        comments.forEach(comment => {
+            const commentText = comment.innerText || comment.textContent;
+
+            // Case-insensitive keyword check
+            if (keywords.some(keyword => commentText.toLowerCase().includes(keyword.toLowerCase()))) {
+                comment.style.display = 'none';
+            }
+        });
+    }
+
+    // Run the function initially
+    hideElements();
+
+    // Monitor for new elements added dynamically
+    const observer = new MutationObserver(hideElements);
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
