@@ -11,27 +11,36 @@
 (function() {
     'use strict';
 
-    // Keywords to block (add new keywords here)
+    // Keywords to block (add new keywords here)         3/11
     const keywords = [
-        "Interstellar", "Starship Troopers", "sixth sense", "The Princess Bride", "Coherence",
-        "Jaws", "Pulp fiction", "The Matrix", "Seven", "The Usual Suspects",
-        "One Flew", "Back to the Future", "Jurassic Park", "Children of men", "Forest Gump", "Shaun of the Dead", "The Dark Knight", "Bruges",
-        "Groundhog Day", "Ex Machina", "No country for old men", "Big Fish", "The Thing", "Hot Fuzz", "Prisoners", "Prestige",
-        "Eternal Sunshine of the Spotless Mind", "Little Miss Sunshine", "Whiplash", "Eyes Wide Shut", "The Lighthouse", "Memento", "Requiem", "Uncut Gems",
-        "Minority Report", "The Substance", "ladder", "Upgrade", "Lost Highway", "Se7en", "Come and See", "Barbarian",
-        "Primer", "The Game", "Predestination", "Arrival", "Oldboy", "12 Angry Men", "Under the Skin", "Mulholland", "Sorry to Bother You", "Shutter Island", "The Wailing"
-, "Beau is Afraid", "Talk To Me", "Rosemary", "Gattaca", "American History", "Princess Bride", "I Saw The Devil", "Threads", "Martyrs", "Bone Tomahawk", "Tusk", "Midsommar", "Funny Games", "Mandy"
-      , "Eraserhead", "12 Monkeys", "Inception", "timecrimes", "Mother!", "Labyrinth", "Annihilation", "Green Room", "The Others", "Donnie Darko", "Mothman", "Blair Witch", "Mitty", "Parasite", "Edge of Tomorrow", "Strange Darling"
-      , "Kill Bill", "The Sadness", "Cabin in The Woods", "Event Horizon", "The Exorcist", "Hereditary", "Chainsaw", "The Empty Man", "Smile 2", "A Serbian Film", "Oddity", "Killing of a sacred deer", "Mungo"
-      , "The Wicker Man", "Speak No Evil", "The Killing of a Sacred Deer", "Burn After Reading", "audition", "Saltburn", "Sacred Dear", "Blue Velvet", "Life is Beautiful", "Possession", "Melancholia", "Fire in the sky"
-      , "We Need to Talk About Kevin", "The Descent", "American beauty", "Vivarium", "Monkey man", "Old Boy", "Apocalypto", "The Raid", "Fight Club", "John Wick", "The Equalizer", "Mad Max"
-      , "Till Dawn", "all at Once", "Alien", "Atomic Blond", "Bullet Train", "Hardcore Henry", "Schindler", "Crank", "Zone of Interest", "Blade Runner", "Dune", "Swiss Army Man", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
-      , "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
-      , "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
-      , "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
-      , "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx", "xxxxxx"
-
+"interstellar", "starship troopers", "sixth sense", "the princess bride", "coherence",
+"jaws", "pulp fiction", "the matrix", "seven", "the usual suspects",
+"one flew", "back to the future", "jurassic park", "children of men", "forest gump", "shaun of the dead", "the dark knight", "bruges",
+"groundhog day", "ex machina", "no country for old men", "big fish", "the thing", "hot fuzz", "prisoners", "prestige",
+"eternal sunshine of the spotless mind", "little miss sunshine", "whiplash", "eyes wide shut", "the lighthouse", "memento", "requiem", "uncut gems",
+"minority report", "the substance", "ladder", "upgrade", "lost highway", "se7en", "come and see", "barbarian",
+"primer", "the game", "predestination", "arrival", "oldboy", "12 angry men", "under the skin", "mulholland", "sorry to bother you", "shutter island", "the wailing",
+"beau is afraid", "talk to me", "rosemary", "gattaca", "american history", "princess bride", "i saw the devil", "threads", "martyrs", "bone tomahawk", "tusk", "midsommar", "funny games", "mandy",
+"eraserhead", "12 monkeys", "inception", "timecrimes", "mother!", "labyrinth", "annihilation", "green room", "the others", "donnie darko", "mothman", "blair witch", "mitty", "parasite", "edge of tomorrow", "strange darling",
+"kill bill", "the sadness", "cabin in the woods", "event horizon", "the exorcist", "hereditary", "chainsaw", "the empty man", "smile 2", "a serbian film", "oddity", "killing of a sacred deer", "mungo",
+"the wicker man", "speak no evil", "the killing of a sacred deer", "burn after reading", "audition", "saltburn", "sacred dear", "blue velvet", "life is beautiful", "possession", "melancholia", "fire in the sky",
+"we need to talk about kevin", "the descent", "american beauty", "vivarium", "monkey man", "old boy", "apocalypto", "the raid", "fight club", "john wick", "the equalizer", "mad max",
+"till dawn", "all at once", "alien", "atomic blond", "bullet train", "hardcore henry", "schindler", "crank", "zone of interest", "blade runner", "dune", "swiss army man", "memories of murder", "vvitch", "it follows", "frailty", "ponty pool", "Grave of the Fireflies",
+"exorcist", "space odyssey", "the grand budapest hotel", "the fountain", "the handmaiden", "samsara", "beyond the black rainbow", "in the mouth of madness", "dumb and dumber", "raising arizona", "eden lake", "the vanishing", "the fourth kind", "sinister", "the grudge", "the ring", "Mystic River", "The Whale", "xxxxxx", "xxxxxx",
+"barry lyndon", "avatar", "the fall", "tropic thunder", "superbad", "galaxy quest", "something about mary", "sarah marshall", "bridesmaids", "momento", "Murder by Death", "eXistenZ", "The Iron Claw", "The Mist", "Ebbing", "Anora", "Conclave", "A Promising Young Woman", "The Departed", "Incendies", "Aftersun ", "What Dreams May Come",
+"get out", "oculus", "the menu", "the ritual", "apocalypse now", "1917", "thin red line", "civil war", "The tunnel", "Tenet", "Aniara", "Vanilla Sky", "John Malkovich", "Promising Young Woman", "Eternal Sunshine", "Dear Zachary", "Arlington Road", "Forrest Gump",
+"heat", "cloverfield lane", "the man from earth", "interstellar", "starship troopers", "sixth sense", "the princess bride", "coherence",
+"exorcist", "space odyssey", "the grand budapest hotel", "the fountain", "the handmaiden", "samsara", "beyond the black rainbow", "in the mouth of madness", "dumb and dumber", "raising arizona", "eden lake", "the vanishing", "the fourth kind", "sinister", "the grudge", "the ring", "Training Day", "Trainspotting", "lebowski", "big trouble in little china",
+"barry lyndon", "avatar", "the fall", "tropic thunder", "superbad", "galaxy quest", "something about mary", "sarah marshall", "bridesmaids", "momento", "antichrist", "Skinamarink", "There Will Be Blood", "Aftersun", "Busan", "The Father", "Enter the Void", "the fifth element", "Mullholland Drive", "Atonement", "Manchester by the Sea", "Once Upon a Time in Hollywood",
+"get out", "oculus", "the menu", "the ritual", "tremors", "dale", "die hard", "Poor Things", "Dogtooth", "The Greasy Strangler", "A Clockwork Orange", "The Invitation", "Wind River", "xxxxxx", "Midnight special", "Leaving Las Vegas", "The Green Mile", "The Machinist",
+"ichi the killer", "hundreds of beavers", "irreversible", "Saving Private", "Fifth element", "Videodrome", "Perfect Blue", "The Endless", "The Nice Guys", "Dark City", "Human Centipede", "Identity", "Exhuma", "Primal Fear", "Deborah Logan"
+      , "Conjuring", "Insidious", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "MadS", "Poughkeepsie", "Incantation", "When Evil Lurks", "The void"
+      , "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "Dredd", "Dancer in the Dark", "Kids", "As Above", "The Witch"
+      , "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "The coffee table", "Airplane"
+      , "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx"
+      , "xxxxx"
     ];
+
 
     // Function to hide elements
     function hideElements() {
