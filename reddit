@@ -6,6 +6,9 @@
 // @author       You
 // @match        https://old.reddit.com/r/MovieSuggestions/comments/*
 // @match        https://old.reddit.com/r/movies/comments/*
+// @match        https://old.reddit.com/r/horror/comments/*
+// @match        https://old.reddit.com/r/horrorreviewed/comments/*
+
 // @icon         https://www.reddit.com/favicon.ico
 // @grant        none
 // ==/UserScript==
