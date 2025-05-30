@@ -4,7 +4,8 @@
 // @version      2.3
 // @description  Hides comments by keywords and counts most-mentioned movie titles (case-insensitive, punctuation-insensitive) in subreddit comment threads
 // @author       You
-// @match        https://old.reddit.com/r/*/comments/*
+// @match        https://old.reddit.com/r/MovieSuggestions/comments/*
+// @match        https://old.reddit.com/r/movies/comments/*
 // @icon         https://www.reddit.com/favicon.ico
 // @grant        none
 // ==/UserScript==
