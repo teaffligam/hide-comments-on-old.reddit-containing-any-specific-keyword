@@ -1,17 +1,19 @@
 // ==UserScript==
-// @name         Hide Comments by Keywords REDDIT - My own script - lightweight
+// @name         Reddit Movie Title Counter & Comment Hider (Normalized)
 // @namespace    http://tampermonkey.net/
-// @version      1.7
-// @description  Hide comments containing specific keywords (case-insensitive)
+// @version      2.3
+// @description  Hides comments by keywords and counts most-mentioned movie titles (case-insensitive, punctuation-insensitive) in subreddit comment threads
 // @author       You
-// @match        *://*/*
+// @match        https://old.reddit.com/r/*/comments/*
+// @icon         https://www.reddit.com/favicon.ico
 // @grant        none
 // ==/UserScript==
 
-(function() {
+
+(function () {
     'use strict';
 
-    // Keywords to block (add new keywords here)         3/11
+    // Blocklist for both hiding comments and excluding from results
     const keywords = [
 "interstellar", "starship troopers", "sixth sense", "the princess bride", "coherence",
 "jaws", "pulp fiction", "the matrix", "seven", "the usual suspects",
@@ -26,40 +28,183 @@
 "the wicker man", "speak no evil", "the killing of a sacred deer", "burn after reading", "audition", "saltburn", "sacred dear", "blue velvet", "life is beautiful", "possession", "melancholia", "fire in the sky",
 "we need to talk about kevin", "the descent", "american beauty", "vivarium", "monkey man", "old boy", "apocalypto", "the raid", "fight club", "john wick", "the equalizer", "mad max",
 "till dawn", "all at once", "alien", "atomic blond", "bullet train", "hardcore henry", "schindler", "crank", "zone of interest", "blade runner", "dune", "swiss army man", "memories of murder", "vvitch", "it follows", "frailty", "ponty pool", "Grave of the Fireflies",
-"exorcist", "space odyssey", "the grand budapest hotel", "the fountain", "the handmaiden", "samsara", "beyond the black rainbow", "in the mouth of madness", "dumb and dumber", "raising arizona", "eden lake", "the vanishing", "the fourth kind", "sinister", "the grudge", "the ring", "Mystic River", "The Whale", "xxxxxx", "xxxxxx",
+"exorcist", "space odyssey", "the grand budapest hotel", "the fountain", "the handmaiden", "samsara", "beyond the black rainbow", "in the mouth of madness", "dumb and dumber", "raising arizona", "eden lake", "the vanishing", "the fourth kind", "sinister", "the grudge", "the ring", "Mystic River", "The Whale", "The Hunt", "Maverick",
 "barry lyndon", "avatar", "the fall", "tropic thunder", "superbad", "galaxy quest", "something about mary", "sarah marshall", "bridesmaids", "momento", "Murder by Death", "eXistenZ", "The Iron Claw", "The Mist", "Ebbing", "Anora", "Conclave", "A Promising Young Woman", "The Departed", "Incendies", "Aftersun ", "What Dreams May Come",
 "get out", "oculus", "the menu", "the ritual", "apocalypse now", "1917", "thin red line", "civil war", "The tunnel", "Tenet", "Aniara", "Vanilla Sky", "John Malkovich", "Promising Young Woman", "Eternal Sunshine", "Dear Zachary", "Arlington Road", "Forrest Gump",
 "heat", "cloverfield lane", "the man from earth", "interstellar", "starship troopers", "sixth sense", "the princess bride", "coherence",
 "exorcist", "space odyssey", "the grand budapest hotel", "the fountain", "the handmaiden", "samsara", "beyond the black rainbow", "in the mouth of madness", "dumb and dumber", "raising arizona", "eden lake", "the vanishing", "the fourth kind", "sinister", "the grudge", "the ring", "Training Day", "Trainspotting", "lebowski", "big trouble in little china",
 "barry lyndon", "avatar", "the fall", "tropic thunder", "superbad", "galaxy quest", "something about mary", "sarah marshall", "bridesmaids", "momento", "antichrist", "Skinamarink", "There Will Be Blood", "Aftersun", "Busan", "The Father", "Enter the Void", "the fifth element", "Mullholland Drive", "Atonement", "Manchester by the Sea", "Once Upon a Time in Hollywood",
 "get out", "oculus", "the menu", "the ritual", "tremors", "dale", "die hard", "Poor Things", "Dogtooth", "The Greasy Strangler", "A Clockwork Orange", "The Invitation", "Wind River", "xxxxxx", "Midnight special", "Leaving Las Vegas", "The Green Mile", "The Machinist",
-"ichi the killer", "hundreds of beavers", "irreversible", "Saving Private", "Fifth element", "Videodrome", "Perfect Blue", "The Endless", "The Nice Guys", "Dark City", "Human Centipede", "Identity", "Exhuma", "Primal Fear", "Deborah Logan"
-      , "Conjuring", "Insidious", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "MadS", "Poughkeepsie", "Incantation", "When Evil Lurks", "The void"
-      , "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "Dredd", "Dancer in the Dark", "Kids", "As Above", "The Witch"
-      , "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "The coffee table", "Airplane"
-      , "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx"
-      , "xxxxx"
+"ichi the killer", "hundreds of beavers", "irreversible", "Saving Private", "Fifth element", "Videodrome", "Perfect Blue", "The Endless", "The Nice Guys", "Dark City", "Human Centipede", "Identity", "Exhuma", "Primal Fear", "Deborah Logan",
+"Conjuring", "Insidious", "Blink Twice", "Magpie", "Gone Girl", "St Maude", "City Of God", "Gone Baby Gone", "Lawrence of Arabia","The Babadook", "Ravenous",
+      "Happiness", "The House That Jack Built", "Salo", "The devils rejects", "Titane", "MadS", "Poughkeepsie", "Incantation", "When Evil Lurks", "The void",
+"Sinners", "True Lies", "The Brutalist", "Fargo", "Truman Show", "Casablanca", "Infinity pool", "Vacancy", "Wrong Turn", "Bodies Bodies Bodies", "Infinity Pool", "Deliverance", "A perfect getaway", "Pink flamingos", "John Dies in the End", "Fear and Loathing In Las Vegas", "The Front Room", "Se7ven", "Enemy", "Upstream Color.", "El Topo",
+      "Love Lies Bleeding", "Dinner in America", "palm springs", "Bottoms", "Under the Silver Lake", "sisu",
+      "I Saw The TV Glow", "Halloween Ends", "Terrifier", "Megalopolis", "Lights Out", "Babylon", "Nope", "LongLegs", "Pearl", "Godzilla Minus One",
+      "Clue", "Rear Window", "Murder on the Orient Express", "Cube", "Knives Out", "Saw", "Glass Onion", "The Outfit", "Escape room", "Hateful Eight", "Rat Race", "Guns Akimbo", "The Devil's Rejects", "Hardcore henry", "King Fu Hustle", "The Gods must be Crazy", "Kung fury", "We're The Millers", "Superbad", "Sharknado", "Tremors", "Macgruber",
+      "Silence of The Lambs", "Hard Candy","Usual Suspects", "Taxi Driver", "The Pianist", "Saint Maud", "The Village", "Resolution", "Mother", "Cloud Atlas", "The Gorge", "Session 9", "Brazil", "Hateful 8",
+      "Burning", "Killing of the sacred deer", "Gaspar", "Bo Is Afraid", "Mad God", "man bites dog", "Serbian film",
+      "The Skin I Live In", "The Holy Mountain", "climax", "the Platform", "Gummo", "Dredd", "Dancer in the Dark", "Kids", "As Above", "The Witch",
+"The Hills have eyes", "Wolf creek.", "Pontypool", "La la land", "Dog Day Afternoon", "Raiders of the Lost Ark", "Predator", "Resevoir Dogs", "Boogie Nights", "The Burbs", "Napoleon Dynamite", "Kung Pow", "Inglorious Bastards", "Kick Ass", "My Cousin Vinny", "Tommy Boy", "Grandma’s Boy", "Goodfellas", "Misery", "The Martian", "Speed", "Terminator 2", "RoboCop", "Ghostbusters", "Hot Rod", "Good Will Hunting", "Kung Fu Hustle", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "xxxxx", "A Simple Plan", "Vertigo.", "Spoorloos.", "Butterfly Effect", "Sicario", "Triangle", "Time crimes",
+      "Matrix", "Baby Driver.", "Black Hawk Down", "Natural Born Killers", "Run Lola Run", "Gladiator", "Showgirls", "Snatch", "Nobody", "Taken", "Collateral", "Argo", "The Wolf of Wall Street", "xxxxx", "xxxxx", "xxxxx", "Bubba Ho Tep", "Deadstream", "Nightmare On Elm Street.", "Ready or not", "Abigail", "Fresh", "Jennifer’s Body", "Housebound", "The Lost Boys", "The Faculty.", "Shawn of the dead", "Cocaine Bear", "American Werewolf in London", "Dead snow (2009)", "Idle Hands", "Cool runnings", "Baby driver", "True Romance", "The coffee table", "Airplane",
+"The Big Short", "Late Night with the Devil", "Shawshank", "Midsommer", "Office Space", "Logan Lucky", "Dragged Across Concrete", "Pan's Labyrinth", "Spirited Away", "The Goonies", "The Game", "The Godfather", "City of God.", "Apollo 13", "Dog Day Afternoon", "Apocalypse Now", "Children of Men", "Good Will Hunting", "Dead Poets Society.", "The Lobster", "Princess Bride", "Requiem for a Dream", "Dark City", "The Blob",
+      "Bad Times at The El Royale", "Get Shorty", "LA Confidential", "The World’s End", "Greenland", "Knowing", "Don’t Look Up", "Full Metal Jacket", "The Lobster", "1982",
+      "The Count of Monte Cristo", "The Northman", "Lucky Number Slevin", "Nocturnal Animals", "The Last House on the Left.", "The Shawshank Redemption", "I Spit on Your Grave", "The Godfather", "V for vendetta", "Blue Ruin",
+      "The Cook, The Thief, His Wife, Her Lover.", "Holy Mountain.", "Possum", "Zachary", "Night Crawler", "Snowtown.", "Clockwork Orange", "Green Inferno", "Men", "Dead Ringers", "They Look Like People.","Amélie", "Das Boot","Terrified", "The Decent", "Wolf Creek",
+"Mandy", "Event Horizon", "Frailty","Passengers", "Planes,Trains and Automobiles", "Room",
     ];
 
-
-    // Function to hide elements
     function hideElements() {
-        // Hide elements containing specified keywords
         const comments = document.querySelectorAll('.thing.comment');
         comments.forEach(comment => {
             const commentText = comment.innerText || comment.textContent;
-
-            // Case-insensitive keyword check
             if (keywords.some(keyword => commentText.toLowerCase().includes(keyword.toLowerCase()))) {
                 comment.style.display = 'none';
             }
         });
     }
-
-    // Run the function initially
     hideElements();
-
-    // Monitor for new elements added dynamically
     const observer = new MutationObserver(hideElements);
     observer.observe(document.body, { childList: true, subtree: true });
+
+    const MAX_TITLE_LENGTH = 40;
+    const MAX_WORDS = 6;
+    const MIN_MENTIONS = 2;
+
+    function normalizeTitle(title) {
+        let normalized = title.toLowerCase();
+        normalized = normalized.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()'"’]/g, '');
+        normalized = normalized.replace(/\s+/g, ' ');
+        normalized = normalized.trim();
+        return normalized;
+    }
+
+    function isBlockedTitle(normTitle) {
+        return keywords.some(keyword =>
+            normTitle.includes(keyword.toLowerCase())
+        );
+    }
+
+    function isLikelyMovieTitle(comment) {
+        const trimmed = comment.trim();
+        const wordCount = trimmed.split(/\s+/).length;
+        return (
+            trimmed.length <= MAX_TITLE_LENGTH &&
+            wordCount <= MAX_WORDS
+        );
+    }
+
+    function extractTitles(text) {
+        const titles = [];
+        const regex = /\b([A-Z][a-z0-9'’\-]*(?:\s+[A-Z][a-z0-9'’\-]*){1,5})\b/g;
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+            const candidate = match[1].trim();
+            const wordCount = candidate.split(/\s+/).length;
+            if (
+                wordCount >= 2 &&
+                wordCount <= MAX_WORDS &&
+                candidate.length <= MAX_TITLE_LENGTH
+            ) {
+                titles.push(candidate);
+            }
+        }
+        return titles;
+    }
+
+    function countTitles() {
+        const comments = Array.from(document.querySelectorAll('.usertext-body .md')).map(div => div.innerText);
+        const titleCounts = {};
+        const originalTitles = {};
+
+        comments.forEach(text => {
+            const trimmed = text.trim();
+            if (isLikelyMovieTitle(trimmed)) {
+                const norm = normalizeTitle(trimmed);
+                if (!isBlockedTitle(norm)) {
+                    titleCounts[norm] = (titleCounts[norm] || 0) + 1;
+                    if (!originalTitles[norm]) originalTitles[norm] = trimmed;
+                }
+            } else {
+                extractTitles(trimmed).forEach(title => {
+                    const norm = normalizeTitle(title);
+                    if (!isBlockedTitle(norm)) {
+                        titleCounts[norm] = (titleCounts[norm] || 0) + 1;
+                        if (!originalTitles[norm]) originalTitles[norm] = title;
+                    }
+                });
+            }
+        });
+        return { titleCounts, originalTitles };
+    }
+
+    function getSortedTitles(titleCounts, originalTitles) {
+        return Object.entries(titleCounts)
+            .filter(([norm, count]) => count >= MIN_MENTIONS)
+            .sort((a, b) => b[1] - a[1])
+            .map(([norm, count]) => [originalTitles[norm], count]);
+    }
+
+    function displayResults(sortedTitles) {
+        const oldContainer = document.getElementById('title-count-results');
+        if (oldContainer) oldContainer.remove();
+
+        const container = document.createElement('div');
+        container.id = 'title-count-results';
+        container.style.background = '#fffbe7';
+        container.style.border = '2px solid #e3c800';
+        container.style.padding = '1em';
+        container.style.margin = '1em 0';
+        container.style.fontSize = '1.2em';
+
+        if (sortedTitles.length === 0) {
+            container.textContent = `No movie titles (not blocked) found with at least ${MIN_MENTIONS} mentions.`;
+        } else {
+            container.innerHTML = `<b>Most Mentioned Movie Titles (min ${MIN_MENTIONS}, excluding blocked, normalized):</b><br><ol>` +
+                sortedTitles.map(([title, count]) => `<li><b>${title}</b> (${count} mentions)</li>`).join('') +
+                '</ol>';
+        }
+
+        const siteTable = document.getElementById('siteTable');
+        if (siteTable) {
+            siteTable.parentNode.insertBefore(container, siteTable);
+        } else {
+            document.body.insertBefore(container, document.body.firstChild);
+        }
+    }
+
+    function addRecountButton() {
+        const button = document.createElement('button');
+        button.textContent = '🔁 Recount Titles';
+        button.style.margin = '1em 0';
+        button.style.padding = '0.5em 1em';
+        button.style.fontSize = '1em';
+        button.style.cursor = 'pointer';
+        button.style.backgroundColor = '#e3c800';
+        button.style.border = 'none';
+        button.style.borderRadius = '5px';
+
+        button.addEventListener('click', () => {
+            const { titleCounts, originalTitles } = countTitles();
+            const sortedTitles = getSortedTitles(titleCounts, originalTitles);
+            displayResults(sortedTitles);
+        });
+
+        const siteTable = document.getElementById('siteTable');
+        if (siteTable) {
+            siteTable.parentNode.insertBefore(button, siteTable);
+        } else {
+            document.body.insertBefore(button, document.body.firstChild);
+        }
+    }
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const { titleCounts, originalTitles } = countTitles();
+            const sortedTitles = getSortedTitles(titleCounts, originalTitles);
+            displayResults(sortedTitles);
+            addRecountButton();
+        }, 1000);
+    });
+
 })();
